@@ -2,7 +2,7 @@ import React from 'react';
 
 function Ecran(props) {
   return (
-    <section>
+    <section className='ecran'>
       {props.value}
     </section>
   );

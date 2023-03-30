@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Bouton from './Bouton';
 import Ecran from './Ecran';
+import '../styles/Calculatrice.css'
 
 function Calculatrice() {
 
@@ -12,7 +13,11 @@ function Calculatrice() {
   const operateurs = ['+', '-', '*', '/'];
 
   function handleButtonClick(buttonLabel) {
-    if (operateurs.includes(buttonLabel) && reset) {
+    if (
+      operateurs.includes(buttonLabel) &&
+      reset &&
+      displayValue !== undefined
+    ) {
       setReset(false);
       setDisplayValue(displayValue + buttonLabel);
       return;
@@ -26,6 +31,9 @@ function Calculatrice() {
         setDisplayValue(eval(displayValue));
         setReset(true);
         break;
+      case "🔙":
+        setDisplayValue(displayValue.slice(0, -1));
+        break;
       default:
         if (displayValue === "0" || reset) {
           setDisplayValue(buttonLabel);
@@ -38,30 +46,51 @@ function Calculatrice() {
   }
 
   return (
-    <>
-      <Ecran value={displayValue} />
+    <div className="calculatrice-container">
+      <div className="calculatrice">
+        <Ecran value={displayValue} />
 
-      <section>
-        {numeros.map((numero) => (
-          <Bouton
-            key={numero}
-            label={numero.toString()}
-            onClick={() => handleButtonClick(numero.toString())}
-          />
-        ))}
+        <section className="pave">
+          <div className="numeros">
+            {numeros.map((numero) => (
+              <Bouton
+                key={numero}
+                label={numero.toString()}
+                onClick={() => handleButtonClick(numero.toString())}
+              />
+            ))}
+          </div>
 
-        {operateurs.map((operation) => (
-          <Bouton
-            key={operation}
-            label={operation}
-            onClick={() => handleButtonClick(operation)}
-          />
-        ))}
+          <div className="operateurs">
+            {operateurs.map((operateur) => (
+              <Bouton
+                key={operateur}
+                label={operateur}
+                onClick={() => handleButtonClick(operateur)}
+              />
+            ))}
+          </div>
 
-        <Bouton key={"="} label="=" onClick={() => handleButtonClick("=")} />
-        <Bouton key={"C"} label="C" onClick={() => handleButtonClick("C")} />
-      </section>
-    </>
+          <div className="boutons-specials">
+            <Bouton
+              key={"🔙"}
+              label="🔙"
+              onClick={() => handleButtonClick("🔙")}
+            />
+            <Bouton
+              key={"C"}
+              label="C"
+              onClick={() => handleButtonClick("C")}
+            />
+            <Bouton
+              key={"="}
+              label="="
+              onClick={() => handleButtonClick("=")}
+            />
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }
 
